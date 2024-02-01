@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { useCallback } from 'react';
 import { useEffect } from 'react';
+import { useRef } from 'react';
 
 function generatePassword(length, isCharacter, isNumber) {
   let password = "";
@@ -21,13 +22,13 @@ function generatePassword(length, isCharacter, isNumber) {
   return password;
 }
 
-
 function App() {
 
   const [password, setPassword] = useState("");
   const [length, setLength] = useState(8);
   const [isCharacter, setIsCharacter] = useState(false);
-  const [isNumber, setIsNumber] = useState(false)
+  const [isNumber, setIsNumber] = useState(false);
+  const passwordRef = useRef(null);
 
   const memoizedGeneratePassword = useCallback(
     () => setPassword(generatePassword(length, isCharacter, isNumber))
@@ -36,8 +37,10 @@ function App() {
   useEffect(() => { memoizedGeneratePassword() }, [memoizedGeneratePassword])
 
   const copyToClipboard = () => {
+    //for highlighting the selected text
+    passwordRef.current?.select();
     //copy password to clipboard
-    navigator.clipboard.writeText(password)
+    navigator.clipboard.writeText(password);
   }
 
   return (
@@ -50,6 +53,7 @@ function App() {
             placeholder='Password'
             value={password}
             readOnly
+            ref={passwordRef}
           />
           <button
             className='w-auto rounded-md p-1 bg-blue-600 text-white'
