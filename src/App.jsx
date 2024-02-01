@@ -45,7 +45,8 @@ function App() {
 
   return (
     <div className='w-full h-screen bg-black pt-10'>
-      <div className='w-2/4 bg-slate-700 m-auto rounded-md p-4'>
+      <div className='w-2/4 bg-slate-700 m-auto rounded-md p-4 text-white'>
+        <h1 className='text-center text-2xl mb-2'>Password Generator</h1>
         <div className='p-2 flex gap-2'>
           <input
             className='w-11/12 rounded-md p-1'
@@ -56,7 +57,7 @@ function App() {
             ref={passwordRef}
           />
           <button
-            className='w-auto rounded-md p-1 bg-blue-600 text-white'
+            className='w-auto rounded-md p-1 px-4 bg-blue-600 text-white'
             onClick={copyToClipboard}
           >
             Copy
