@@ -1,8 +1,5 @@
-import { useState } from 'react'
-import './App.css'
-import { useCallback } from 'react';
-import { useEffect } from 'react';
-import { useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import './App.css';
 
 function generatePassword(length, isCharacter, isNumber) {
   let password = "";
@@ -23,7 +20,6 @@ function generatePassword(length, isCharacter, isNumber) {
 }
 
 function App() {
-
   const [password, setPassword] = useState("");
   const [length, setLength] = useState(8);
   const [isCharacter, setIsCharacter] = useState(false);
@@ -31,25 +27,26 @@ function App() {
   const passwordRef = useRef(null);
 
   const memoizedGeneratePassword = useCallback(
-    () => setPassword(generatePassword(length, isCharacter, isNumber))
-    , [length, isCharacter, isNumber])
+    () => setPassword(generatePassword(length, isCharacter, isNumber)),
+    [length, isCharacter, isNumber]
+  );
 
-  useEffect(() => { memoizedGeneratePassword() }, [memoizedGeneratePassword])
+  useEffect(() => {
+    memoizedGeneratePassword();
+  }, [memoizedGeneratePassword]);
 
   const copyToClipboard = useCallback(() => {
-    //for highlighting the selected text
     passwordRef.current?.select();
-    //copy password to clipboard
     navigator.clipboard.writeText(password);
-  }, [password, passwordRef])
+  }, [password, passwordRef]);
 
   return (
-    <div className='w-full h-screen bg-black pt-10'>
-      <div className='w-2/4 bg-slate-700 m-auto rounded-md p-4 text-white'>
-        <h1 className='text-center text-2xl mb-2'>Password Generator</h1>
-        <div className='p-2 flex gap-2'>
+    <div className='w-full h-screen bg-black pt-12 px-4'>
+      <div className='lg:w-2/4 md:w-3/4 sm:w-full bg-slate-700 m-auto rounded-md p-4'>
+        <h1 className='text-center text-2xl mb-2  text-white'>Password Generator</h1>
+        <div className='p-2 flex flex-col md:flex-row gap-2'>
           <input
-            className='w-11/12 rounded-md p-1'
+            className='w-full md:w-11/12 rounded-md p-1 mb-2 md:mb-0'
             type="text"
             placeholder='Password'
             value={password}
@@ -57,13 +54,13 @@ function App() {
             ref={passwordRef}
           />
           <button
-            className='w-auto rounded-md p-1 px-4 bg-blue-600 text-white'
+            className='w-full md:w-auto rounded-md p-1 px-4 bg-blue-600 text-white'
             onClick={copyToClipboard}
           >
             Copy
           </button>
         </div>
-        <div className='flex gap-4 text-white p-2'>
+        <div className='flex flex-col md:flex-row gap-4 text-white p-2'>
           <div className='flex align-middle gap-2'>
             <input
               type="range"
@@ -72,7 +69,6 @@ function App() {
               value={length}
               onChange={e => setLength(Number(e.target.value))}
             />
-
             <label>length {length}</label>
           </div>
           <div className='flex align-middle gap-2'>
@@ -94,7 +90,7 @@ function App() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
