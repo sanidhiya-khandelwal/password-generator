@@ -1,9 +1,43 @@
 
+import { useState } from 'react'
 import './App.css'
+import { useCallback } from 'react';
+import { useEffect } from 'react';
+
+
+function generatePassword(length, isCharacter, isNumber) {
+  let password = "";
+  let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+  if (isCharacter) {
+    str += "!~#$%^&*()_+@<><>?/.,`-+{}[]"
+  }
+
+  if (isNumber) {
+    str += "1234567890";
+  }
+
+  for (let i = 1; i <= length; i++) {
+    password += str.charAt(Math.floor((Math.random() * str.length)));
+  }
+  return password;
+}
+
 
 function App() {
 
+  const [password, setPassword] = useState("");
+  const [length, setLength] = useState(8);
+  const [isCharacter, setIsCharacter] = useState(false);
+  const [isNumber, setIsNumber] = useState(false)
 
+
+  const memoizedGeneratePassword = useCallback(
+    () => setPassword(generatePassword(length, isCharacter, isNumber))
+    , [length, isCharacter, isNumber])
+
+  console.log(isCharacter);
+  useEffect(() => { memoizedGeneratePassword() }, [memoizedGeneratePassword])
 
   return (
     <div className='w-full h-screen bg-black pt-10'>
@@ -13,6 +47,7 @@ function App() {
             className='w-11/12 rounded-md p-1'
             type="text"
             placeholder='Password'
+            value={password}
           />
           <button
             className='w-auto rounded-md p-1 bg-blue-600 text-white'>
@@ -24,13 +59,18 @@ function App() {
             <input
               type="range"
               className='cursor-pointer'
+              max={20}
+              value={length}
+              onChange={e => setLength(Number(e.target.value))}
             />
-            <label>length 8</label>
+
+            <label>length {length}</label>
           </div>
           <div className='flex align-middle gap-2'>
             <input
               type="checkbox"
               className='cursor-pointer'
+              onChange={e => setIsCharacter(prev => !prev)}
             />
             <label>Characters</label>
           </div>
@@ -38,6 +78,7 @@ function App() {
             <input
               type="checkbox"
               className='cursor-pointer'
+              onChange={e => setIsNumber(prev => !prev)}
             />
             <label>Numbers</label>
           </div>
