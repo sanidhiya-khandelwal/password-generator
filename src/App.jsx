@@ -1,9 +1,7 @@
-
 import { useState } from 'react'
 import './App.css'
 import { useCallback } from 'react';
 import { useEffect } from 'react';
-
 
 function generatePassword(length, isCharacter, isNumber) {
   let password = "";
@@ -31,13 +29,16 @@ function App() {
   const [isCharacter, setIsCharacter] = useState(false);
   const [isNumber, setIsNumber] = useState(false)
 
-
   const memoizedGeneratePassword = useCallback(
     () => setPassword(generatePassword(length, isCharacter, isNumber))
     , [length, isCharacter, isNumber])
 
-  console.log(isCharacter);
   useEffect(() => { memoizedGeneratePassword() }, [memoizedGeneratePassword])
+
+  const copyToClipboard = () => {
+    //copy password to clipboard
+    navigator.clipboard.writeText(password)
+  }
 
   return (
     <div className='w-full h-screen bg-black pt-10'>
@@ -48,9 +49,12 @@ function App() {
             type="text"
             placeholder='Password'
             value={password}
+            readOnly
           />
           <button
-            className='w-auto rounded-md p-1 bg-blue-600 text-white'>
+            className='w-auto rounded-md p-1 bg-blue-600 text-white'
+            onClick={copyToClipboard}
+          >
             Copy
           </button>
         </div>
