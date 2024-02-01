@@ -36,12 +36,12 @@ function App() {
 
   useEffect(() => { memoizedGeneratePassword() }, [memoizedGeneratePassword])
 
-  const copyToClipboard = () => {
+  const copyToClipboard = useCallback(() => {
     //for highlighting the selected text
     passwordRef.current?.select();
     //copy password to clipboard
     navigator.clipboard.writeText(password);
-  }
+  }, [password, passwordRef])
 
   return (
     <div className='w-full h-screen bg-black pt-10'>
